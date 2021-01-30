@@ -1,7 +1,7 @@
 var slideIndex = 1;
-document.getElementById("image_1").src = "https://s35930.p1154.sites.pressdns.com/wp-content/uploads/2019/10/vegan-plant-based-news-meme1.png";
-document.getElementById("image_2").src = "https://www.totallyveganbuzz.com/wp-content/uploads/2018/11/25-Hilarious-vegan-memes-that-provide-valuable-emotional-support_TotallyVeganBuzz-1280x720.jpg";
-document.getElementById("image_3").src = "https://static.boredpanda.com/blog/wp-content/uploads/2018/10/vegan-memes-fb32-png__700.jpg";
+document.getElementById("image_1").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+document.getElementById("image_2").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+document.getElementById("image_3").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
 showSlides(slideIndex);
 
 // Next/previous controls
