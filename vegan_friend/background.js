@@ -18,10 +18,11 @@ function showResponse(tabId, value){
 // When the browser-action button is clicked...
 chrome.webNavigation.onCompleted.addListener(function (details) {
     // ...check the URL of the active tab against our pattern and...
-    if (urlRegex.test(details.url)) {
-        // ...if it matches, send a message specifying a callback too
-        let output = Promise.resolve(parseDom(details.url));
-        output.then(value => showResponse(details.tabId, value));
+    
+    // if (urlRegex.test(details.url)) {
+    //     // ...if it matches, send a message specifying a callback too
+    //     let output = Promise.resolve(parseDom(details.url));
+    //     output.then(value => showResponse(details.tabId, value));
 
-      }
+    //   }
 });
