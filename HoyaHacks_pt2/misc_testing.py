@@ -4,7 +4,7 @@
 #  -figure out how to search HTML for mentions of meat
 
 #FIREBASE STUFF:
-if True:
+if False:
     print('FIREBASE')
     import firebase_admin
     from firebase_admin import credentials
@@ -54,3 +54,10 @@ if False:
     #Grab out the site text
     all_text_ish = soup.find_all('p')
     print(all_text_ish[0].text)
+
+#ALTERNATE PLOTTING:
+if True:
+    import matplotlib.pyplot as plt
+
+    plt.scatter(['thing1', 'thing2'], [1, 2])
+    plt.show()
