@@ -7,11 +7,12 @@
     "scripts": ["background.js"]
   },
   "content_scripts": [{
-    "matches": ["*://*.stackoverflow.com/*"],
+    "matches": ["<all_urls>"],
     "js": ["content.js"]
   }],
   "browser_action": {
-    "default_title": "Test Extension"
+    "default_title": "Test Extension",
+    "default_popup":"popup.html"
   },
   "permissions": ["activeTab", "webNavigation"]
 }
