@@ -59,7 +59,7 @@ def is_meat(input_url):
     pass_back = {'meat_ct' : past_meats + new_meats,
                  'user' : 'our_person',
                  'new_meats' : new_meats,
-                 'contains_meat' : True,
+                 'contains_meat' : new_meats > 0,
                  'roast' : roast}
 
     return pass_back

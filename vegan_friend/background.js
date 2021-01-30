@@ -1,17 +1,18 @@
-// Regex-pattern to check URLs against. 
+// Regex-pattern to check URLs against.
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
 var urlRegex = /^https?:\/\/(?:[^./?#]+\.)?foodnetwork\.com/;
 
 // A function to use as callback
 async function parseDom(currentUrl) {
     let parsedResponse = fetch('http://localhost:5000/meats/'+currentUrl, {method: 'GET'})
-                         .then(results => results.json())
-                         .then(console.log);
-    return parsedResponse
+              .then(response => response.json());
+    return parsedResponse;
 }
 
 function showResponse(tabId, value){
-  chrome.tabs.sendMessage(tabId, {'method': value});
+  if(value.contains_meat==true){
+    chrome.tabs.sendMessage(tabId, {'method': value.roast});
+  }
 }
 
 // When the browser-action button is clicked...
