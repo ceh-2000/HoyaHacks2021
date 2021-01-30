@@ -56,8 +56,21 @@ if False:
     print(all_text_ish[0].text)
 
 #ALTERNATE PLOTTING:
-if True:
+if False:
     import matplotlib.pyplot as plt
+    import seaborn as sns
+    from matplotlib.figure import Figure
 
-    plt.scatter(['thing1', 'thing2'], [1, 2])
-    plt.show()
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    sns.pointplot(x = ['Past Meats', 'New Meats'], y = [10, 10 + 5], ax = axis)
+    axis.set_title('Your Meat Trajectory', **{'fontweight' : 'bold'})
+
+    plt_fp = 'test.png'
+    fig.savefig(plt_fp, dpi = 100)
+
+if True:
+    our_person = {'site_1' : 3, 'site_2' : 4, 'meat_ct' : 90}
+    site_nums = [int(s.split('_')[1]) for s in our_person.keys() if s.split('_')[0] == 'site']
+
+    

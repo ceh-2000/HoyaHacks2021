@@ -8,6 +8,7 @@ from firebase_admin import storage
 
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 from web_scraping import get_meats
 
@@ -38,18 +39,25 @@ def is_meat(input_url):
 
     for doc in docs:
         if doc.id == 'our_person':
-            past_meats = doc.to_dict()['meat_ct']
+            our_person = doc.to_dict()
+
+    past_meats = our_person['meat_ct']
+    next_site_num = max([int(s.split('_')[1]) for s in our_person.keys() if s.split('_')[0] == 'site']) + 1
+
+    #Building up dictionary for user
+    our_person['site_' + str(next_site_num)] = new_meats
+    our_person['meat_ct'] = past_meats + new_meats
 
     #Push data to firebase
     doc_ref = db.collection(u'users').document(u'our_person')
-    doc_ref.set({'meat_ct' : past_meats + new_meats})
+    doc_ref.set(our_person)
 
     #Building a roast for the meat viewer
     template_roasts = ['Should you really be looking at a page with %s meat mentions??',
                        'You know, there are %s mentions of meat on this page...',
                        'I get it, we can\'t ALL be strong willed. %s meat mentions is a lot though.',
                        'MEAT ALERT: THERE ARE %s MENTIONS OF MEAT HERE!!!',
-                       'Look I get it. You\'re weak. But %s mentions of meat? Really?']
+                       'Look I get it. You\'re weak. But %s mentions of meat? Really??']
 
     roast = None
     if new_meats > 0:
@@ -64,35 +72,45 @@ def is_meat(input_url):
 
     return pass_back
 
-#TODO: fix the breaking + make better plots to send back!
+#PLOTS:
+#  -Meat trends over time
+#  -CO2 emissions reduction becuase of the meat that you didn't eat
+#  -Money savings
+#TODO: make this a normal function (not an endpoint) and trigger when new meat is found!
 @app.route('/plots', methods = ['GET'])
 def make_plots():
-    if False:
-        #Get meat count data
-        users_ref = db.collection(u'users')
-        docs = users_ref.stream()
-        meat_ct = 0
+    #Get meat count data
+    users_ref = db.collection(u'users')
+    docs = users_ref.stream()
+    meat_ct = 0
 
-        for doc in docs:
-            if doc.id == 'our_person':
-                meat_ct = doc.to_dict()['meat_ct']
+    for doc in docs:
+        if doc.id == 'our_person':
+            our_person = doc.to_dict()
 
-        #Make a plot w/seaborn - DOESN'T CURRENTLY PLOT ANYTHING MEANINGFUL, just a test!
-        #  TODO: try agin to see if it's still broken!
-        ax = sns.pointplot(x = ['Past Meats', 'New Meats'], y = [meat_ct, meat_ct + 5])
-        ax.set_title('Your Meat Trajectory', **{'fontweight' : 'bold'})
+    #TEST PLOT
+    # fig = Figure()
+    # axis = fig.add_subplot(1, 1, 1)
+    # sns.pointplot(x = ['Past Meats', 'New Meats'], y = [meat_ct, meat_ct + 5], ax = axis)
+    #
+    # plt_fp = 'test.png'
+    # fig.savefig(plt_fp, dpi = 100)
 
-        plt_fp = 'test.png'
-        plt.savefig(plt_fp, dpi = 100)
+    #Meat trends over time
 
-        #Push the plot into firebase + get URL
-        bucket = storage.bucket()
-        blob = bucket.blob(plt_fp)
-        blob.upload_from_filename(plt_fp)
 
-        blob.make_public()
-        plt_url = blob.public_url
-    return {'welcome' : 'hello'}
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+
+    #Push the plot into firebase + get URL
+    bucket = storage.bucket()
+    blob = bucket.blob(plt_fp)
+    blob.upload_from_filename(plt_fp)
+
+    blob.make_public()
+    plt_url = blob.public_url
+
+    return {'urls' : [plt_url]}
 
 if __name__ == '__main__':
     app.run(debug = True)
