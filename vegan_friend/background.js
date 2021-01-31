@@ -11,18 +11,30 @@ async function parseDom(currentUrl) {
 
 function showResponse(tabId, value){
   if(value.contains_meat==true){
-    chrome.tabs.sendMessage(tabId, {'method': value.roast});
+    chrome.storage.sync.set({roast: value.roast}, function() {
+      chrome.tabs.sendMessage(tabId, {'method': value.roast});
+    });
   }
+
+  /////// FOR TESTING
+  // chrome.storage.sync.set({roast: value}, function() {
+  //   chrome.tabs.sendMessage(tabId, {'method': value});
+  // });
+
 }
 
 // When the browser-action button is clicked...
 chrome.webNavigation.onCompleted.addListener(function (details) {
-    // ...check the URL of the active tab against our pattern and...
-    
-    // if (urlRegex.test(details.url)) {
-    //     // ...if it matches, send a message specifying a callback too
-    //     let output = Promise.resolve(parseDom(details.url));
-    //     output.then(value => showResponse(details.tabId, value));
 
-    //   }
+    // ...check the URL of the active tab against our pattern and...
+    if (urlRegex.test(details.url)) {
+        // ...if it matches, send a message specifying a callback too
+        let output = Promise.resolve(parseDom(details.url));
+        output.then(value => showResponse(details.tabId, value));
+
+        /////// FOR TESTING
+        // showResponse(details.tabId, "MEATS");
+      }
 });
+
+

@@ -1,12 +1,11 @@
 var slideIndex = 1;
-document.getElementById("image_1").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
-document.getElementById("image_2").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
-document.getElementById("image_3").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+
 showSlides(slideIndex);
 
 // Next/previous controls
 function plusSlides(n) {
   showSlides(slideIndex += n);
+  
 }
 
 // Thumbnail image controls
@@ -15,6 +14,12 @@ function currentSlide(n) {
 }
 
 function showSlides(n) {
+  // fetch a different URL for each plot each time
+  document.getElementById("intro").src = "images/vf_resized_logo-640_x_478.jpg";
+  document.getElementById("image_1").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+  document.getElementById("image_2").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/meat_trendA.png";
+  document.getElementById("image_3").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+
   var i;
   var slides = document.getElementsByClassName("mySlides");
   var dots = document.getElementsByClassName("dot");
@@ -40,18 +45,28 @@ nextButton.onclick = function() {
   plusSlides(1);
 };
 
+let dot0 = document.getElementById('dot_0');
+dot0.onclick = function() {
+  currentSlide(1);
+};
+
 let dot1 = document.getElementById('dot_1');
 dot1.onclick = function() {
-  currentSlide(1);
+  currentSlide(2);
 };
 
 let dot2 = document.getElementById('dot_2');
 dot2.onclick = function() {
-  currentSlide(2);
+  currentSlide(3);
 };
 
 let dot3 = document.getElementById('dot_3');
 dot3.onclick = function() {
-  currentSlide(3);
+  currentSlide(4);
+};
+
+let dot4 = document.getElementById('dot_4');
+dot4.onclick = function() {
+  currentSlide(5);
 };
 

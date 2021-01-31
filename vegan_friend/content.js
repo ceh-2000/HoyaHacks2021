@@ -1,23 +1,48 @@
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-    // if(message.method == 'meat'){
-        alert(message.method);
-        flashBackground("red", "white");
         document.title = "MEAT?!"
-        document.body.innerHTML +='<div style="position:absolute;width:100%;height:100%;z-index:100;background:#000;"></div>';
+        flashBackground("red", "white", message);
         return true;
-    //}
 });
 
-function flashBackground(color1, color2){
+function flashBackground(color1, color2, message){
     document.body.style.backgroundColor=color1
     setTimeout(function(){ document.body.style.backgroundColor=color2;
         setTimeout(function(){ document.body.style.backgroundColor=color1;
             setTimeout(function(){ document.body.style.backgroundColor=color2;
                 setTimeout(function(){ document.body.style.backgroundColor=color1;
                     setTimeout(function(){ document.body.style.backgroundColor=color2;
+                    setTimeout(function(){
+                            showModal(message);
+                        }, 500);
                     }, 500);
                 }, 500);
             }, 500);
         }, 500);
     }, 500);
 }
+
+function showModal(roast){
+    let modal = document.createElement("dialog");
+    modal.setAttribute(
+        "style",`
+        height:450px;
+        border: none;
+        top:150px;
+        border-radius:20px;
+        background-color:white;
+        position: fixed; box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
+        `
+        );
+    modal.innerHTML = `<iframe id="popup-content"; style="height:100%"></iframe>
+    <div style="position:absolute; top:0px; left:5px;">
+    <button style="padding: 8px 12px; font-size: 16px; border: none; border-radius: 20px;">x</button>
+    </div>`;
+    document.body.appendChild(modal);
+    const dialog = document.querySelector("dialog");
+    dialog.showModal();
+    const iframe = document.getElementById("popup-content");
+    iframe.src = chrome.extension.getURL("roast.html");
+    iframe.frameBorder = 0;
+    dialog.querySelector("button").addEventListener("click", () => {
+    dialog.close();
+});}
