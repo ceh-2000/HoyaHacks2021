@@ -13,6 +13,7 @@ from matplotlib.figure import Figure
 from web_scraping import get_meats
 
 from random import choice
+from numpy import cumsum
 
 app = FlaskAPI(__name__)
 
@@ -76,7 +77,6 @@ def is_meat(input_url):
 #  -Meat trends over time
 #  -CO2 emissions reduction becuase of the meat that you didn't eat
 #  -Money savings
-#TODO: make this a normal function (not an endpoint) and trigger when new meat is found!
 @app.route('/plots', methods = ['GET'])
 def make_plots():
     #Get meat count data
@@ -88,19 +88,22 @@ def make_plots():
         if doc.id == 'our_person':
             our_person = doc.to_dict()
 
-    #TEST PLOT
-    # fig = Figure()
-    # axis = fig.add_subplot(1, 1, 1)
-    # sns.pointplot(x = ['Past Meats', 'New Meats'], y = [meat_ct, meat_ct + 5], ax = axis)
-    #
-    # plt_fp = 'test.png'
-    # fig.savefig(plt_fp, dpi = 100)
-
     #Meat trends over time
-
+    time_trend = [our_person[s] for s in sorted(our_person) if s != 'meat_ct']
+    time_trend = cumsum(time_trend)
+    x_axis = [i for i in range(1, len(time_trend) + 1)]
 
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
+    sns.lineplot(x = x_axis, y = time_trend, ax = axis)
+    axis.set_title('Your Meat Trends', **{'fontweight' : 'bold'})
+    axis.set_xticks(range(1, len(time_trend) + 1))
+    axis.set_yticks(range(0, max(time_trend) + 1, 5))
+    axis.set_xlabel('Site Count')
+    axis.set_ylabel('Meat Count')
+
+    plt_fp = 'meat_trend.png'
+    fig.savefig(plt_fp, dpi = 200)
 
     #Push the plot into firebase + get URL
     bucket = storage.bucket()

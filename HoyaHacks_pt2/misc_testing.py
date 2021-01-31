@@ -70,7 +70,25 @@ if False:
     fig.savefig(plt_fp, dpi = 100)
 
 if True:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from matplotlib.figure import Figure
+    from numpy import cumsum
+
     our_person = {'site_1' : 3, 'site_2' : 4, 'meat_ct' : 90}
     site_nums = [int(s.split('_')[1]) for s in our_person.keys() if s.split('_')[0] == 'site']
 
-    
+    time_trend = [our_person[s] for s in sorted(our_person) if s != 'meat_ct']
+    time_trend = cumsum(time_trend)
+    print(time_trend)
+    x_axis = [i for i in range(1, len(time_trend) + 1)]
+    print(x_axis)
+
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    sns.lineplot(x = x_axis, y = time_trend, ax = axis)
+    axis.set_xticks(range(1, len(time_trend) + 1))
+    axis.set_yticks(range(0, max(time_trend) + 1))
+
+    plt_fp = 'meat_trend.png'
+    fig.savefig(plt_fp, dpi = 200)
