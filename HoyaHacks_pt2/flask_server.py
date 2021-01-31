@@ -103,19 +103,19 @@ def make_plots():
 
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    sns.lineplot(x = x_axis, y = time_trend, ax = axis, color = '#9c4c4c', linewidth = 3)
+    sns.lineplot(x = x_axis, y = time_trend, ax = axis, color = 'g', linewidth = 3)
     # axis.set_title('Your Meat Trend', **{'fontweight' : 'bold', 'size' : 20})
     axis.set_xticks(range(1, len(time_trend) + 1))
     axis.set_yticks(range(0, max(time_trend) + 1, 5))
-    axis.set_xlabel('Site Count', labelpad = 20, **{'fontweight' : 'bold'})
-    axis.set_ylabel('Cumulative Meat Count', labelpad = 20, **{'fontweight' : 'bold'})
+    axis.set_xlabel('Site Count', labelpad = 20, **{'fontweight' : 'bold', 'size' : 16})
+    axis.set_ylabel('Cumulative Meat Count', labelpad = 20, **{'fontweight' : 'bold', 'size' : 16})
     axis.grid(False, axis = 'x')
     axis.spines['right'].set_visible(False)
     axis.spines['left'].set_visible(False)
     axis.spines['top'].set_visible(False)
     axis.spines['bottom'].set_visible(False)
 
-    plt_fp1 = 'meat_trend' + str(randint(0, 1000)) + '.png'
+    plt_fp1 = 'meat_trend' + str(randint(0, 10000)) + '.png'
     fig.tight_layout()
     fig.savefig(plt_fp1, dpi = 200)
 
@@ -130,7 +130,7 @@ def make_plots():
     axis.stem(['You'], [our_person], basefmt = ' ', linefmt = 'g', markerfmt = 'go')
     axis.stem(['Meat Eater'], [meat_eater], basefmt = ' ', linefmt = 'r', markerfmt = 'ro')
     # axis.set_title('Carbon Emissions Reduction', **{'fontweight' : 'bold', 'size' : 20})
-    axis.set_ylabel('CO2 Emissions (car miles)', labelpad = 20, **{'fontweight' : 'bold'})
+    axis.set_ylabel('CO2 Emissions (car miles)', labelpad = 20, **{'fontweight' : 'bold', 'size' : 16})
     axis.grid(False, axis = 'x')
     axis.spines['right'].set_visible(False)
     axis.spines['left'].set_visible(False)
@@ -138,7 +138,7 @@ def make_plots():
     axis.spines['bottom'].set_visible(False)
     axis.margins(x = 0.5)
 
-    plt_fp2 = 'C02_savings' + str(randint(0, 1000)) + '.png'
+    plt_fp2 = 'C02_savings' + str(randint(0, 10000)) + '.png'
     fig.savefig(plt_fp2, dpi = 200)
 
     #Calculating money saved
@@ -146,7 +146,7 @@ def make_plots():
     money_saved = 0.75 * no_meat_meals
     money_saved_str = '${:,.2f}'.format(money_saved)
 
-    #Push the plot into firebase + get URL
+    #Push the plots into firebase + get URLs
     urls = []
     bucket = storage.bucket()
     for fp in [plt_fp1, plt_fp2]:
