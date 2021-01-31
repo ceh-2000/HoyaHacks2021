@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 
 from web_scraping import get_meats
 
-from random import choice
+from random import choice, randint
 from numpy import cumsum
 
 app = FlaskAPI(__name__)
@@ -74,9 +74,11 @@ def is_meat(input_url):
     return pass_back
 
 #PLOTS:
-#  -Meat trends over time
 #  -CO2 emissions reduction becuase of the meat that you didn't eat
 #  -Money savings
+#    -400g a day ==> 0.133 kilos a meal
+#    -1 kilo = 44.6 car miles of CO2 emission on avg
+#    ->Count the meals
 @app.route('/plots', methods = ['GET'])
 def make_plots():
     #Get meat count data
@@ -93,27 +95,59 @@ def make_plots():
     time_trend = cumsum(time_trend)
     x_axis = [i for i in range(1, len(time_trend) + 1)]
 
+    sns.set_style('whitegrid')
+
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    sns.lineplot(x = x_axis, y = time_trend, ax = axis)
-    axis.set_title('Your Meat Trends', **{'fontweight' : 'bold'})
+    sns.lineplot(x = x_axis, y = time_trend, ax = axis, color = '#9c4c4c', linewidth = 3)
+    axis.set_title('Your Meat Trend', **{'fontweight' : 'bold', 'size' : 20})
     axis.set_xticks(range(1, len(time_trend) + 1))
     axis.set_yticks(range(0, max(time_trend) + 1, 5))
-    axis.set_xlabel('Site Count')
-    axis.set_ylabel('Meat Count')
+    axis.set_xlabel('Site Count', labelpad = 20)
+    axis.set_ylabel('Cumulative Meat Count', labelpad = 20)
+    axis.grid(False, axis = 'x')
+    axis.spines['right'].set_visible(False)
+    axis.spines['left'].set_visible(False)
+    axis.spines['top'].set_visible(False)
+    axis.spines['bottom'].set_visible(False)
 
-    plt_fp = 'meat_trend.png'
-    fig.savefig(plt_fp, dpi = 200)
+    plt_fp1 = 'meat_trend' + str(randint(0, 1000)) + '.png'
+    fig.tight_layout()
+    fig.savefig(plt_fp1, dpi = 200)
+
+    #CO2 reduction plot
+    had_meat = sum([our_person[s] > 0 for s in sorted(our_person) if s != 'meat_ct'])
+    ttl_meals = len(time_trend)
+    meat_eater = 0.133 * 44.6 * ttl_meals
+    our_person = 0.133 * 44.6 * had_meat
+
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    axis.stem(['You'], [our_person], basefmt = ' ', linefmt = 'g', markerfmt = 'go')
+    axis.stem(['Meat Eater'], [meat_eater], basefmt = ' ', linefmt = 'r', markerfmt = 'ro')
+    axis.set_title('Carbon Emissions Reduction', **{'fontweight' : 'bold', 'size' : 20})
+    axis.set_ylabel('CO2 Emissions (car miles)', labelpad = 20)
+    axis.grid(False, axis = 'x')
+    axis.spines['right'].set_visible(False)
+    axis.spines['left'].set_visible(False)
+    axis.spines['top'].set_visible(False)
+    axis.spines['bottom'].set_visible(False)
+    axis.margins(x = 0.5)
+
+    plt_fp2 = 'C02_savings' + str(randint(0, 1000)) + '.png'
+    fig.savefig(plt_fp2, dpi = 200)
 
     #Push the plot into firebase + get URL
+    urls = []
     bucket = storage.bucket()
-    blob = bucket.blob(plt_fp)
-    blob.upload_from_filename(plt_fp)
+    for fp in [plt_fp1, plt_fp2]:
+        blob = bucket.blob(fp)
+        blob.upload_from_filename(fp)
 
-    blob.make_public()
-    plt_url = blob.public_url
+        blob.make_public()
+        urls.append(blob.public_url)
 
-    return {'urls' : [plt_url]}
+    return {'urls' : [urls]}
 
 if __name__ == '__main__':
     app.run(debug = True)

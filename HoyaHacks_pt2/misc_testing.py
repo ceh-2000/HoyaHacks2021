@@ -75,7 +75,9 @@ if True:
     from matplotlib.figure import Figure
     from numpy import cumsum
 
-    our_person = {'site_1' : 3, 'site_2' : 4, 'meat_ct' : 90}
+    sns.set_style('whitegrid')
+
+    our_person = {'site_1' : 3, 'site_2' : 4, 'site_3' : 0, 'meat_ct' : 90}
     site_nums = [int(s.split('_')[1]) for s in our_person.keys() if s.split('_')[0] == 'site']
 
     time_trend = [our_person[s] for s in sorted(our_person) if s != 'meat_ct']
@@ -84,11 +86,39 @@ if True:
     x_axis = [i for i in range(1, len(time_trend) + 1)]
     print(x_axis)
 
+    had_meat = sum([our_person[s] > 0 for s in sorted(our_person) if s != 'meat_ct'])
+    ttl_meals = len(time_trend)
+    meat_eater = 0.133 * 44.6 * ttl_meals
+    our_person = 0.133 * 44.6 * had_meat
+    print(meat_eater, our_person)
+
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
-    sns.lineplot(x = x_axis, y = time_trend, ax = axis)
-    axis.set_xticks(range(1, len(time_trend) + 1))
-    axis.set_yticks(range(0, max(time_trend) + 1))
+    # axis.stem(['You', 'Meat Eater'], [our_person, meat_eater], basefmt = ' ', color = '#9c4c4c')
+    axis.stem(['You'], [our_person], basefmt = ' ', linefmt = 'g', markerfmt = 'go')
+    axis.stem(['Meat Eater'], [meat_eater], basefmt = ' ', linefmt = 'r', markerfmt = 'ro')
+    axis.set_title('Carbon Emissions Reduction', **{'fontweight' : 'bold', 'size' : 20})
+    axis.set_ylabel('CO2 Emissions (car miles)')
+    axis.grid(False, axis = 'x')
+    axis.spines['right'].set_visible(False)
+    axis.spines['left'].set_visible(False)
+    axis.spines['top'].set_visible(False)
+    axis.spines['bottom'].set_visible(False)
+    axis.margins(x = 0.5)
 
-    plt_fp = 'meat_trend.png'
+    plt_fp = 'C02_savings.png'
     fig.savefig(plt_fp, dpi = 200)
+
+    # fig = Figure()
+    # axis = fig.add_subplot(1, 1, 1)
+    # sns.lineplot(x = x_axis, y = time_trend, ax = axis, linewidth = 1.5, color = '#2e8c47')
+    # axis.set_xticks(range(1, len(time_trend) + 1))
+    # axis.set_yticks(range(0, max(time_trend) + 1))
+    # axis.grid(False, axis = 'x')
+    # axis.spines['right'].set_visible(False)
+    # axis.spines['left'].set_visible(False)
+    # axis.spines['top'].set_visible(False)
+    # axis.spines['bottom'].set_visible(False)
+    #
+    # plt_fp = 'meat_trend.png'
+    # fig.savefig(plt_fp, dpi = 200)
