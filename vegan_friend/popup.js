@@ -5,7 +5,7 @@ showSlides(slideIndex);
 // Next/previous controls
 function plusSlides(n) {
   showSlides(slideIndex += n);
-  
+
 }
 
 // Thumbnail image controls
@@ -13,12 +13,41 @@ function currentSlide(n) {
   showSlides(slideIndex = n);
 }
 
+// A function to get the most updated images
+async function getPlots() {
+    let parsedResponse = await fetch('http://localhost:5000/plots', {method: 'GET'})
+                         .then(response => response.json());
+    document.getElementById("image_1").src = parsedResponse.url1;
+    document.getElementById("image_2").src = parsedResponse.url2;
+    document.getElementById("caption_3").innerHTML = "You saved: ~"+parsedResponse.money_saved;
+    // return "Hello";
+}
+
 function showSlides(n) {
-  // fetch a different URL for each plot each time
+
   document.getElementById("intro").src = "images/vf_resized_logo-640_x_478.jpg";
-  document.getElementById("image_1").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
-  document.getElementById("image_2").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/meat_trendA.png";
-  document.getElementById("image_3").src = "https://storage.googleapis.com/hoyahacks2021.appspot.com/test.png";
+  document.getElementById("image_3").src = "images/money.png";
+
+  // let image1 = document.getElementById("image_1");
+  // let image2 = document.getElementById("image_2");
+  // let caption3 = document.getElementById("caption_3");
+  Promise.resolve(getPlots());
+
+  // plots.then(value =>
+  //   caption3.innerHTML = value.money_saved;
+  //
+  // );
+  // plots.then(value =>
+  //   alert(value.money_saved);
+  //   // document.getElementById("image_1").src = value.urls[0];
+  //   // document.getElementById("image_2").src = value.urls[1];
+  //   // document.getElementById("caption_3").innerHTML = value.money_saved;
+  // );
+  // alert(value.url1);
+  // image1.src = value.url1;
+  // image2.src = value.url2;
+
+  // fetch a different URL for each plot each time
 
   var i;
   var slides = document.getElementsByClassName("mySlides");
@@ -69,4 +98,3 @@ let dot4 = document.getElementById('dot_4');
 dot4.onclick = function() {
   currentSlide(5);
 };
-

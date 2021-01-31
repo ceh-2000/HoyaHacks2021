@@ -82,32 +82,36 @@ if True:
 
     time_trend = [our_person[s] for s in sorted(our_person) if s != 'meat_ct']
     time_trend = cumsum(time_trend)
-    print(time_trend)
+    # print(time_trend)
     x_axis = [i for i in range(1, len(time_trend) + 1)]
-    print(x_axis)
+    # print(x_axis)
 
     had_meat = sum([our_person[s] > 0 for s in sorted(our_person) if s != 'meat_ct'])
     ttl_meals = len(time_trend)
     meat_eater = 0.133 * 44.6 * ttl_meals
     our_person = 0.133 * 44.6 * had_meat
-    print(meat_eater, our_person)
+    # print(meat_eater, our_person)
 
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    # axis.stem(['You', 'Meat Eater'], [our_person, meat_eater], basefmt = ' ', color = '#9c4c4c')
-    axis.stem(['You'], [our_person], basefmt = ' ', linefmt = 'g', markerfmt = 'go')
-    axis.stem(['Meat Eater'], [meat_eater], basefmt = ' ', linefmt = 'r', markerfmt = 'ro')
-    axis.set_title('Carbon Emissions Reduction', **{'fontweight' : 'bold', 'size' : 20})
-    axis.set_ylabel('CO2 Emissions (car miles)')
-    axis.grid(False, axis = 'x')
-    axis.spines['right'].set_visible(False)
-    axis.spines['left'].set_visible(False)
-    axis.spines['top'].set_visible(False)
-    axis.spines['bottom'].set_visible(False)
-    axis.margins(x = 0.5)
+    no_meat_meals = ttl_meals - had_meat
+    money_saved = 0.75 * no_meat_meals
+    print('$' + str(money_saved))
 
-    plt_fp = 'C02_savings.png'
-    fig.savefig(plt_fp, dpi = 200)
+    # fig = Figure()
+    # axis = fig.add_subplot(1, 1, 1)
+    # # axis.stem(['You', 'Meat Eater'], [our_person, meat_eater], basefmt = ' ', color = '#9c4c4c')
+    # axis.stem(['You'], [our_person], basefmt = ' ', linefmt = 'g', markerfmt = 'go')
+    # axis.stem(['Meat Eater'], [meat_eater], basefmt = ' ', linefmt = 'r', markerfmt = 'ro')
+    # axis.set_title('Carbon Emissions Reduction', **{'fontweight' : 'bold', 'size' : 20})
+    # axis.set_ylabel('CO2 Emissions (car miles)')
+    # axis.grid(False, axis = 'x')
+    # axis.spines['right'].set_visible(False)
+    # axis.spines['left'].set_visible(False)
+    # axis.spines['top'].set_visible(False)
+    # axis.spines['bottom'].set_visible(False)
+    # axis.margins(x = 0.5)
+    #
+    # plt_fp = 'C02_savings.png'
+    # fig.savefig(plt_fp, dpi = 200)
 
     # fig = Figure()
     # axis = fig.add_subplot(1, 1, 1)

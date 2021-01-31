@@ -36,5 +36,3 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
         // showResponse(details.tabId, "MEATS");
       }
 });
-
-
